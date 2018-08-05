@@ -1,0 +1,44 @@
+<button (click)="reload()">Click me!</button>
+
+<table [id]="tableId">
+  <thead>
+    <tr class="header-row">
+      <th *ngIf="tableConfig">
+        <input type="checkbox" (change)="selectAll()">
+      </th>
+      <th *ngFor="let col of visibilityCols">{{col.label}}
+        <span *ngIf="col.sortable" (click)="sortable(col)">
+          [---]
+        </span>
+      </th>
+    </tr>
+    <tr>
+      <td *ngIf="tableConfig">
+      </td>
+      <td *ngFor="let col of visibilityCols">
+        <input
+          *ngIf="col.filtration && col.filtration.type === 'input'"
+          type="text"
+          #searchData
+          (keyup.enter)="filtration(col.name, searchData.value, 'input')">
+        <select
+          *ngIf="col.filtration && col.filtration.type === 'select'"
+          (change)="filtration(col.name, $event.target.value, 'select')">
+          <option
+            *ngFor="let opt of col.filtration.config"
+            [value]="opt.key">
+            {{opt.value}}
+          </option>
+        </select>
+      </td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of data" [id]="item.id">
+      <td *ngIf="tableConfig">
+        <input type="checkbox" (change)="select(item.id)">
+      </td>
+      <td *ngFor="let col of visibilityCols">{{item[col.name]}}</td>
+    </tr>
+  </tbody>
+</table>
