@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from '../../../providers/electron.service';
+import {HostsService} from '../../../providers/hosts.service';
 
 @Component({
     selector: 'app-hosts',
@@ -9,7 +10,7 @@ import { ElectronService } from '../../../providers/electron.service';
 export class HostsComponent implements OnInit {
     public tableParam = {
         tableId: 'example-table',
-        // model: this.usersModel,
+        model: this.hostsService,
         checkboxFields: true,
         params: {
             rowNum: 30,
@@ -20,23 +21,32 @@ export class HostsComponent implements OnInit {
             },
             colModel: [
                 {name: 'id', key: true, hidden: true},
-                {label: 'First name', name: 'first_name', filtration: {type: 'input'}, sortable: {isAsc: true}},
-                {
-                    label: 'Last name',
-                    name: 'last_name',
-                    filtration:
-                        {
-                            type: 'select',
-                            config: [{key: '', value: 'All'}, {key: 'one', value: 'One'}, {key: 'two', value: 'Two'}]
-                        }
-                },
+                {label: 'name', name: 'name', filtration: {type: 'input'}, sortable: {isAsc: true}},
+                // {
+                //     label: 'Last name',
+                //     name: 'last_name',
+                //     filtration:
+                //         {
+                //             type: 'select',
+                //             config: [{key: '', value: 'All'}, {key: 'one', value: 'One'}, {key: 'two', value: 'Two'}]
+                //         }
+                // },
             ]
         }
     };
 
-    constructor(private electronService: ElectronService) {
+    constructor(private electronService: ElectronService,
+                private hostsService: HostsService) {
     }
 
     ngOnInit() {
+      // this.hostsService.init();
+    }
+
+    public getHosts() {
+      // this.hostsService.add({name: 'Test'});
+      const hosts = this.hostsService.getMany().then(console.log);
+
+      console.log({hosts});
     }
 }

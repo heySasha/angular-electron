@@ -1,12 +1,12 @@
-import { Component, Input } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'supernova-grid',
+  selector: 'app-supernova-grid',
   templateUrl: 'supernova-grid.component.html',
   styleUrls: ['supernova-grid.component.scss']
 })
 
-export class SupernovaGridComponent {
+export class SupernovaGridComponent implements OnInit {
   public tableConfig: any;
   private model: any;
   private filters: any = {$and: []};
@@ -22,10 +22,17 @@ export class SupernovaGridComponent {
     this.tableId = data.tableId;
     this.model = data.model;
 
-    this.getData();
+    // this.getData();
   }
 
   constructor() {
+  }
+
+  ngOnInit() {
+    // this.model.init();
+    // setTimeout(() => {}, 2000);
+    this.getData();
+
   }
 
   public  select(value) {
@@ -68,7 +75,10 @@ export class SupernovaGridComponent {
 
   private getData() {
     this.model
-      .get(this.filters)
-      .subscribe(data => this.data = data);
+      .getMany(/*this.filters*/)
+      .then(data => {
+        console.log({data});
+        this.data = data;
+      });
   }
 }

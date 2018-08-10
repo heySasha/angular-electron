@@ -10,6 +10,7 @@ export class SettingsComponent implements OnInit {
     public utils: Map<string, any> = new Map<string, any>();
 
     constructor(private electronService: ElectronService) {
+      console.log('=====SettingsComponent(constructor)=======');
     }
 
     ngOnInit() {
@@ -18,10 +19,18 @@ export class SettingsComponent implements OnInit {
     public checkUtil(util: string) {
         const {spawn} = this.electronService.childProcess;
 
-        const _util = spawn(util, ['--version']);
+        try {
+          const _util = spawn(util, ['--version']);
 
-        _util.stdout.on('data', (data) => {
+          _util.stdout.on('data', (data) => {
             this.utils.set(util, data);
-        });
+          });
+
+          _util.on('error', () => {
+            this.utils.set(util, 'Please, install util!');
+          });
+        } catch (e) {
+          this.utils.set(util, e);
+        }
     }
 }

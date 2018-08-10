@@ -22,6 +22,7 @@ import { WebviewDirective } from './directives/webview.directive';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/pages/home/home.component';
+import {HostsService} from './providers/hosts.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -50,7 +51,10 @@ export function HttpLoaderFactory(http: HttpClient) {
             }
         })
     ],
-    providers: [ElectronService],
+    providers: [
+      ElectronService,
+      HostsService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

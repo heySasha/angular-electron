@@ -16,11 +16,12 @@ export class ElectronService {
     remote: typeof remote;
     childProcess: typeof childProcess;
     fs: typeof fs;
-
-    private db: any|null = null;
+    db: any = null;
 
     constructor() {
-        // Conditional imports
+        console.log('=====ElectronService(constructor)=======');
+
+      // Conditional imports
         if (this.isElectron()) {
             this.ipcRenderer = window.require('electron').ipcRenderer;
             this.webFrame = window.require('electron').webFrame;
@@ -28,6 +29,15 @@ export class ElectronService {
 
             this.childProcess = window.require('child_process');
             this.fs = window.require('fs');
+
+            MongoClient.connect('mongodb://localhost:27017', {useNewUrlParser: true})
+              .then(client => {
+                console.log('Connection to DB!');
+                this.db = client.db('main');
+              })
+              .catch(() => {
+                  console.log('Not connection to DB!');
+              });
         }
     }
 
@@ -35,23 +45,21 @@ export class ElectronService {
         return window && window.process && window.process.type;
     };
 
-    public async DB() {
-        if (this.isConnectDB()) {
-            return this.db;
-        }
-
-        const url = 'mongodb://localhost:27017';
-        const dbName = 'myproject';
-
-        try {
-            this.db = await MongoClient.connect(url);
-            return this.db;
-        } catch (e) {
-            throw new Error('Not connection to DB!');
-        }
-    }
-
-    public isConnectDB() {
-        return !!this.db;
-    }
+    // public async DB() {
+    //   console.log('=====ElectronService(DB)=======');
+    //
+    //   if (this.db) {
+    //         return this.db;
+    //     }
+    //
+    //
+    //     try {
+    //         const client = await MongoClient.connect('mongodb://localhost:27017', {useNewUrlParser: true});
+    //         this.db = client.db('main');
+    //
+    //         return this.db;
+    //     } catch (e) {
+    //         throw new Error('Not connection to DB!');
+    //     }
+    // }
 }
