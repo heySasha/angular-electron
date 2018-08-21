@@ -8,7 +8,6 @@
       </th>
       <th *ngFor="let col of visibilityCols">{{col.label}}
         <span *ngIf="col.sortable" (click)="sortable(col)">
-          [---]
         </span>
       </th>
     </tr>

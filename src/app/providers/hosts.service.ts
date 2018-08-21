@@ -1,37 +1,33 @@
-import {Injectable, OnInit} from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { ElectronService } from './electron.service';
+
+import * as randomstring from 'randomstring';
 
 @Injectable()
 export class HostsService implements OnInit {
   private hosts: any = null;
 
   constructor(private electroService: ElectronService) {
-    console.log('=====HostsService(constructor)=======');
-
     this.hosts = this.electroService.db.collection('hosts');
   }
 
   ngOnInit() {
     console.log('=====HostsService(ngOnInit)=======');
-
-    // this.electroService.DB().then((db) => {
-    //   this.hosts = db.collection('hosts');
-    //   console.log('--------Hosts connection!--------');
-    // }, console.log);
   }
 
-  // public init() {
-  //   this.electroService.DB().then((db) => {
-  //     this.hosts = db.collection('hosts');
-  //     console.log('--------Hosts connection!--------');
-  //   }, console.log);
-  // }
+  public getMany(query: any = {}) {
+    console.log(query);
 
-  public getMany() {
-    return this.hosts.find({}).toArray();
+    return this.hosts.find(query).toArray();
   }
 
-  public add(host: any) {
+  public add() {
+    const host = {name: randomstring.generate(8), country: randomstring.generate(8)};
+
     this.hosts.insert(host);
+  }
+
+  public insertMany(hosts: any[]) {
+    this.hosts.insertMany(hosts);
   }
 }

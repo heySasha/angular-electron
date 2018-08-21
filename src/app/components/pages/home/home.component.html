@@ -6,7 +6,11 @@
             <textarea id="add-hosts" cols="30" rows="40" #text></textarea>
         </div>
         <div class="row">
-            <button class="waves-effect waves-light btn-small">Add hosts!</button>
+          <label for="country">Country</label>
+          <input type="text" id="country" #country>
+        </div>
+        <div class="row">
+            <button class="waves-effect waves-light btn-small" (click)="addHosts(text.value, country.value)">Add hosts!</button>
         </div>
     </div>
     <div class="col s5">

@@ -21,7 +21,9 @@ export class HostsComponent implements OnInit {
             },
             colModel: [
                 {name: 'id', key: true, hidden: true},
-                {label: 'name', name: 'name', filtration: {type: 'input'}, sortable: {isAsc: true}},
+                {label: 'Ip', name: 'ip', filtration: {type: 'input'}, sortable: {isAsc: true}},
+                {label: 'Country', name: 'country', filtration: {type: 'input'}, sortable: {isAsc: true}},
+                {label: 'Nmap', name: 'nmap', filtration: {type: 'input'}, sortable: {isAsc: true}}
                 // {
                 //     label: 'Last name',
                 //     name: 'last_name',
@@ -48,5 +50,9 @@ export class HostsComponent implements OnInit {
       const hosts = this.hostsService.getMany().then(console.log);
 
       console.log({hosts});
+    }
+
+    public addHost() {
+      this.hostsService.add();
     }
 }

@@ -8,12 +8,13 @@ import {Component, Input, OnInit} from '@angular/core';
 
 export class SupernovaGridComponent implements OnInit {
   public tableConfig: any;
-  private model: any;
-  private filters: any = {$and: []};
-
   public visibilityCols: Array<any>;
   public tableId: string;
   public data: Array<any>;
+
+  private model: any;
+  private filters: any = {};
+  private filtersAnd: any[] = [];
 
   @Input()
   set config(data: any) {
@@ -36,7 +37,7 @@ export class SupernovaGridComponent implements OnInit {
   }
 
   public  select(value) {
-    console.log(value);
+    // console.log(value);
   }
 
   public selectAll() {
@@ -51,23 +52,36 @@ export class SupernovaGridComponent implements OnInit {
   }
 
   public filtration(colName: string, value: string, type: string) {
-    const index = this.filters.$and.findIndex(item => item[colName]);
+    // console.log(this.filters);
+
+    const index = this.filtersAnd.findIndex(item => item[colName]);
+
+    // console.log(index);
+
     const filter = type === 'input' ? {[colName]: {$regex: value, $options: 'si'}} : {[colName]: value};
 
     if (index !== -1) {
-      if (this.filters.$and[index][colName] === value) {
+      if (this.filtersAnd[index][colName] === value) {
         return;
       }
 
       if (!value) {
-        this.filters.$and.splice(index, 1);
+        this.filtersAnd.splice(index, 1);
       } else {
-        this.filters.$and[index] = filter;
+        this.filtersAnd[index] = filter;
       }
     } else {
-      if (value) {
-        this.filters.$and.push(filter);
+      if (!value) {
+        return;
       }
+
+      this.filtersAnd.push(filter);
+    }
+
+    if (this.filtersAnd.length) {
+      this.filters = {$and: this.filtersAnd};
+    } else {
+      this.filters = {};
     }
 
     this.getData();
@@ -75,7 +89,7 @@ export class SupernovaGridComponent implements OnInit {
 
   private getData() {
     this.model
-      .getMany(/*this.filters*/)
+      .getMany(this.filters)
       .then(data => {
         console.log({data});
         this.data = data;
