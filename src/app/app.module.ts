@@ -23,6 +23,8 @@ import { WebviewDirective } from './directives/webview.directive';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/pages/home/home.component';
 import {HostsService} from './providers/hosts.service';
+import { AddingComponent } from './components/pages/home/components/adding/adding.component';
+import { ScanningComponent } from './components/pages/home/components/scanning/scanning.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -33,6 +35,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     declarations: [
         AppComponent,
         HomeComponent,
+        AddingComponent,
+        ScanningComponent,
         SettingsComponent,
         HostsComponent,
         SupernovaGridComponent,
@@ -52,8 +56,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         })
     ],
     providers: [
-      ElectronService,
-      HostsService
+        ElectronService,
+        HostsService
     ],
     bootstrap: [AppComponent]
 })

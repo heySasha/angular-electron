@@ -21,7 +21,7 @@ export class ElectronService {
     constructor() {
         console.log('=====ElectronService(constructor)=======');
 
-      // Conditional imports
+        // Conditional imports
         if (this.isElectron()) {
             this.ipcRenderer = window.require('electron').ipcRenderer;
             this.webFrame = window.require('electron').webFrame;
@@ -31,19 +31,19 @@ export class ElectronService {
             this.fs = window.require('fs');
 
             MongoClient.connect('mongodb://localhost:27017', {useNewUrlParser: true})
-              .then(client => {
-                console.log('Connection to DB!');
-                this.db = client.db('main');
-              })
-              .catch(() => {
-                  console.log('Not connection to DB!');
-              });
+                .then(client => {
+                    console.log('Connection to DB!');
+                    this.db = client.db('main');
+                })
+                .catch(() => {
+                    console.log('Not connection to DB!');
+                });
         }
     }
 
     isElectron = () => {
         return window && window.process && window.process.type;
-    };
+    }
 
     // public async DB() {
     //   console.log('=====ElectronService(DB)=======');

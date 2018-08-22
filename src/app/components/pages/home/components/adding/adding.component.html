@@ -1,0 +1,13 @@
+<div class="col s2">
+    <div class="row">
+        <label for="add-hosts">Added: <span>0</span></label>
+        <textarea id="add-hosts" cols="30" rows="40" #text></textarea>
+    </div>
+    <div class="row">
+        <label for="country">Country</label>
+        <input type="text" id="country" #country>
+    </div>
+    <div class="row">
+        <button class="waves-effect waves-light btn-small" (click)="addHosts(text.value, country.value)">Add hosts!</button>
+    </div>
+</div>

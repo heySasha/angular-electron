@@ -5,29 +5,30 @@ import * as randomstring from 'randomstring';
 
 @Injectable()
 export class HostsService implements OnInit {
-  private hosts: any = null;
+    private hosts: any = null;
 
-  constructor(private electroService: ElectronService) {
-    this.hosts = this.electroService.db.collection('hosts');
-  }
+    constructor(private electroService: ElectronService) {
+        this.hosts = this.electroService.db.collection('hosts');
+    }
 
-  ngOnInit() {
-    console.log('=====HostsService(ngOnInit)=======');
-  }
+    ngOnInit() {
+        console.log('=====HostsService(ngOnInit)=======');
+    }
 
-  public getMany(query: any = {}) {
-    console.log(query);
+    public getMany(query: any = {}) {
+        console.log(query);
 
-    return this.hosts.find(query).toArray();
-  }
+        return this.hosts.find(query).toArray();
+    }
 
-  public add() {
-    const host = {name: randomstring.generate(8), country: randomstring.generate(8)};
+    public add() {
+        const host = {name: randomstring.generate(8), country: randomstring.generate(8)};
 
-    this.hosts.insert(host);
-  }
+        this.hosts.insert(host);
+    }
 
-  public insertMany(hosts: any[]) {
-    this.hosts.insertMany(hosts);
-  }
+    public insertMany(hosts: any[]) {
+        return this.hosts.insertMany(hosts);
+    }
 }
+
