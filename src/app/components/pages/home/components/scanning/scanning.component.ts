@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { fillRange } from '../../../../../utils';
+import { HostsService } from '../../../../../providers/hosts.service';
 
 @Component({
     selector: 'app-scanning',
@@ -7,6 +9,6 @@ import { Component } from '@angular/core';
 })
 export class ScanningComponent {
 
-    constructor() {
+    constructor(private hostsService: HostsService) {
     }
 }

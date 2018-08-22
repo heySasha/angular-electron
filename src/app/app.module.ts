@@ -14,7 +14,6 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HostsComponent } from './components/pages/hosts/hosts.component';
 import { SettingsComponent } from './components/pages/settings/settings.component';
-import { SupernovaGridComponent } from './components/supernova-grid/supernova-grid.component';
 
 import { ElectronService } from './providers/electron.service';
 
@@ -22,9 +21,10 @@ import { WebviewDirective } from './directives/webview.directive';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/pages/home/home.component';
-import {HostsService} from './providers/hosts.service';
+import { HostsService} from './providers/hosts.service';
 import { AddingComponent } from './components/pages/home/components/adding/adding.component';
-import { ScanningComponent } from './components/pages/home/components/scanning/scanning.component';
+import { LogsComponent } from './components/pages/logs/logs.component';
+import { SupernovaGridModule } from './components/supernova-grid/supernova-grid.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -36,10 +36,9 @@ export function HttpLoaderFactory(http: HttpClient) {
         AppComponent,
         HomeComponent,
         AddingComponent,
-        ScanningComponent,
+        LogsComponent,
         SettingsComponent,
         HostsComponent,
-        SupernovaGridComponent,
         WebviewDirective
     ],
     imports: [
@@ -47,6 +46,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         FormsModule,
         HttpClientModule,
         AppRoutingModule,
+        SupernovaGridModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
