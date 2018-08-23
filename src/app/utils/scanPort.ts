@@ -31,6 +31,7 @@ export class ScanPort implements IScan {
         const host = hosts.pop();
 
         this.scanProcess.process = this.electronService.childProcess.spawn('nmap', ['-Pn', '-p3389', host._id]);
+        // todo spawn('nmblookup', ['-A', _id]); for scan login
 
         this.scanProcess.data(async (data) => {
             const res = ScanPort.parse(data);

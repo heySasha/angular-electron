@@ -4,8 +4,7 @@ import { HostsService } from '../../../../../providers/hosts.service';
 
 @Component({
     selector: 'app-adding',
-    templateUrl: './adding.component.html',
-    styleUrls: ['./adding.component.scss']
+    templateUrl: './adding.component.html'
 })
 export class AddingComponent {
 

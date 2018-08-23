@@ -1,34 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ElectronService } from '../../../providers/electron.service';
 
 @Component({
     selector: 'app-settings',
     templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.scss']
+    styleUrls: ['./settings.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent implements OnInit {
-    public utils: Map<string, any> = new Map<string, any>();
+    public utils: Map<string, any> = new Map<string, string>([
+        ['nmap', ''],
+        ['git', '']
+    ]);
 
-    constructor(private electronService: ElectronService) {
+    constructor(private readonly electronService: ElectronService,
+                private cdr: ChangeDetectorRef) {
       console.log('=====SettingsComponent(constructor)=======');
     }
 
     ngOnInit() {
     }
 
+    // todo fix changeDetection Pipe
     public checkUtil(util: string) {
-        try {
-          const _util = this.electronService.childProcess.spawn(util, ['--version']);
+        console.log(util);
 
-          _util.stdout.on('data', (data) => {
-            this.utils.set(util, data);
-          });
+        const _util = this.electronService.childProcess.spawn(util, ['--version']);
 
-          _util.on('error', () => {
+        _util.stdout.on('data', (data) => {
+            this.utils.set(util, 'ssssssssssssss');
+            // this.cdr.markForCheck();
+        });
+
+        _util.on('error', () => {
             this.utils.set(util, 'Please, install util!');
-          });
-        } catch (e) {
-          this.utils.set(util, e);
-        }
+            // this.cdr.markForCheck();
+        });
+
+
+        console.log(this.utils);
     }
 }

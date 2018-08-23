@@ -4,8 +4,7 @@ import {HostsService} from '../../../providers/hosts.service';
 
 @Component({
     selector: 'app-hosts',
-    templateUrl: './hosts.component.html',
-    styleUrls: ['./hosts.component.scss']
+    templateUrl: './hosts.component.html'
 })
 export class HostsComponent implements OnInit {
     public tableParam = {

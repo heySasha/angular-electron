@@ -8,8 +8,7 @@ serve = args.some(val => val === '--serve');
 
 function createWindow() {
 
-  const electronScreen = screen;
-  const size = electronScreen.getPrimaryDisplay().workAreaSize;
+  const size = screen.getPrimaryDisplay().workAreaSize;
 
   // Create the browser window.
   win = new BrowserWindow({

@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { HostsService } from '../../../../../providers/hosts.service';
-import { ScanPort } from '../../../../../utils/scanPort';
+import { ScanPort } from '../../../../../utils';
 
 @Component({
     selector: 'app-scanning',
-    templateUrl: './scanning.component.html',
-    styleUrls: ['./scanning.component.scss']
+    templateUrl: './scanning.component.html'
 })
 export class ScanningComponent {
 
