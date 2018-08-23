@@ -2,29 +2,43 @@ import { Injectable, OnInit } from '@angular/core';
 import { ElectronService } from './electron.service';
 
 import * as randomstring from 'randomstring';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class HostsService implements OnInit {
     private hosts: any = null;
 
-    constructor(private electroService: ElectronService) {
-        this.hosts = this.electroService.db.collection('hosts');
+    constructor(private electronService: ElectronService) {
+        const interval = setInterval(() => {
+            if (this.electronService.db) {
+                clearInterval(interval);
+                this.hosts = this.electronService.db.collection('hosts');
+            }
+        }, 2000);
     }
 
     ngOnInit() {
         console.log('=====HostsService(ngOnInit)=======');
     }
 
-    public getMany(query: any = {}) {
-        console.log(query);
+    get collection() {
+        return this.hosts;
+    }
 
-        return this.hosts.find(query).toArray();
+    public getMany(query: any = {}) {
+        return Observable.create((observer) => {
+            const interval = setInterval(async () => {
+                if (this.hosts) {
+                    clearInterval(interval);
+                    observer.next(await this.hosts.find(query).toArray());
+                }
+            }, 10);
+        });
     }
 
     public add() {
         const host = {name: randomstring.generate(8), country: randomstring.generate(8)};
-
-        this.hosts.insert(host);
+        this.hosts.insertOne(host);
     }
 
     public insertMany(hosts: any[]) {

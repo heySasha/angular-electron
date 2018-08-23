@@ -1,12 +1,27 @@
-<div class="row">
-    <div class="col s4">
-        <a routerLink="/">Home</a>
+<nav>
+    <div class="nav-wrapper">
+        <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li routerLinkActive='active' routerLink="/scans"><a>Scans</a></li>
+            <li routerLinkActive='active' routerLink="/logs"><a>Logs</a></li>
+            <li routerLinkActive='active' routerLink="/hosts"><a>Hosts</a></li>
+            <li routerLinkActive='active' routerLink="/settings"><a>Settings</a></li>
+        </ul>
     </div>
-    <div class="col s4">
-        <a routerLink="/settings">Settings</a>
-    </div>
-    <div class="col s4">
-        <a routerLink="/hosts">Hosts</a>
-    </div>
-</div>
+</nav>
+
+<!--<div class="row">-->
+    <!--<div class="col s3">-->
+        <!--<a routerLink="/">Scans</a>-->
+    <!--</div>-->
+    <!--<div class="col s3">-->
+        <!--<a routerLink="/logs">Logs</a>-->
+    <!--</div>-->
+    <!--<div class="col s3">-->
+        <!--<a routerLink="/hosts">Hosts</a>-->
+    <!--</div>-->
+    <!--<div class="col s3">-->
+        <!--<a routerLink="/settings">Settings</a>-->
+    <!--</div>-->
+<!--</div>-->
+<!--<hr>-->
 <router-outlet></router-outlet>

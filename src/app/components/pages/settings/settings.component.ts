@@ -17,10 +17,8 @@ export class SettingsComponent implements OnInit {
     }
 
     public checkUtil(util: string) {
-        const {spawn} = this.electronService.childProcess;
-
         try {
-          const _util = spawn(util, ['--version']);
+          const _util = this.electronService.childProcess.spawn(util, ['--version']);
 
           _util.stdout.on('data', (data) => {
             this.utils.set(util, data);

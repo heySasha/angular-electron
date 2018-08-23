@@ -25,6 +25,9 @@ import { HostsService} from './providers/hosts.service';
 import { AddingComponent } from './components/pages/home/components/adding/adding.component';
 import { LogsComponent } from './components/pages/logs/logs.component';
 import { SupernovaGridModule } from './components/supernova-grid/supernova-grid.module';
+import { ScanningComponent } from './components/pages/home/components/scanning/scanning.component';
+import { ScanPort } from './utils/scanPort';
+import { InfoObj, Scan } from './utils/IScan';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -36,6 +39,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         AppComponent,
         HomeComponent,
         AddingComponent,
+        ScanningComponent,
         LogsComponent,
         SettingsComponent,
         HostsComponent,
@@ -57,7 +61,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ],
     providers: [
         ElectronService,
-        HostsService
+        HostsService,
+        ScanPort,
+        Scan,
+        InfoObj
     ],
     bootstrap: [AppComponent]
 })

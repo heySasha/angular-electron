@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { fillRange } from '../../../../../utils';
 import { HostsService } from '../../../../../providers/hosts.service';
+import { ScanPort } from '../../../../../utils/scanPort';
 
 @Component({
     selector: 'app-scanning',
@@ -9,6 +9,15 @@ import { HostsService } from '../../../../../providers/hosts.service';
 })
 export class ScanningComponent {
 
-    constructor(private hostsService: HostsService) {
+    constructor(private hostsService: HostsService,
+                private scanPort: ScanPort) {
+    }
+
+    public onScan() {
+        this.scanPort.run({}, {limit: 2}).then(data => {
+            console.log(data);
+        }, error => {
+            console.log(error);
+        });
     }
 }

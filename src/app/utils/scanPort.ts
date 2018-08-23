@@ -1,89 +1,58 @@
-import {IScan} from './IScan';
+import { InfoObj, IScan, Scan } from './IScan';
+import { Injectable } from '@angular/core';
+import { ElectronService } from '../providers/electron.service';
+import { HostsService } from '../providers/hosts.service';
 
-const { spawn } = require('child_process');
-
+@Injectable()
 export class ScanPort implements IScan {
-    private total: number;
-    private success: number;
-    private nmapErrors: number;
-    private mongoErrors: number;
-    private allRunning: number;
-
-    private processes: number;
-    private hosts: any[];
-    private model: any;
-
-    constructor() {
-        this.reset();
+    constructor(
+        private readonly electronService: ElectronService,
+        private readonly hostsService: HostsService,
+        private readonly scanProcess: Scan,
+        private readonly infoObj: InfoObj) {
     }
 
-    public run() {
-        const {length} = this.hosts;
-        let {processes} = this;
-        if (processes > length) {
-            processes = length;
+    public async run(query, projection = {limit: 0}, processes = 20) {
+        const hosts = await this.hostsService.collection.find(query).limit(projection.limit).toArray();
+
+        console.log(hosts);
+        const range = Math.floor(hosts.length / processes) || 1;
+
+        while (hosts.length) {
+            this.scan(hosts.splice(0, range));
         }
-
-        const range = Math.floor(length / processes);
-
-        let i = 0;
-        while (i + range < length) {
-            this.scan(this.hosts.slice(i, i + range));
-            i += range;
-        }
-        this.scan(this.hosts.slice(i));
-    }
-
-    public reset() {
-        this.total = 0;
-        this.success = 0;
-        this.mongoErrors = 0;
-        this.nmapErrors = 0;
-        this.allRunning = (this.hosts && this.hosts.length) || 0;
     }
 
     public info() {
-        const {total, success, nmapErrors, mongoErrors, allRunning} = this;
-
-        return {allRunning, total, success, nmapErrors, mongoErrors};
-    }
-
-
-    public init(model, hosts, processes = 20) {
-        this.model = model;
-        this.hosts = hosts;
-        this.processes = processes;
-
-        this.reset();
+        return this.infoObj;
     }
 
     private scan(hosts) {
-        const {_id} = hosts.pop();
-        const nmap = spawn('nmap', ['-Pn', '-p3389', _id]);
+        const host = hosts.pop();
 
-        nmap.stdout.on('data', async (data) => {
+        this.scanProcess.process = this.electronService.childProcess.spawn('nmap', ['-Pn', '-p3389', host._id]);
+
+        this.scanProcess.data(async (data) => {
             const res = ScanPort.parse(data);
 
             if (ScanPort.isSuccess(res)) {
-                this.success++;
+                this.infoObj.success++;
 
                 try {
-                    await this.model.updateOne({_id}, {$set: ScanPort.formatData(res)});
+                    await this.hostsService.collection.updateOne({_id: host._id}, {$set: ScanPort.formatData(res)});
                 } catch (e) {
-                    this.mongoErrors++;
-                    console.error('---mongo error---');
+                    this.infoObj.mongoErrors++;
                 }
             }
         });
 
-        nmap.stderr.on('data', () => {
-            this.nmapErrors++;
-            console.error('---nmap error---');
+        this.scanProcess.error(() => {
+            this.infoObj.nmapErrors++;
         });
 
-        nmap.on('close', async () => {
-            this.total++;
-            await this.model.updateOne({_id}, {$set: {scanAt: Date()}});
+        this.scanProcess.close(async () => {
+            this.infoObj.total++;
+            await this.hostsService.collection.updateOne({_id: host._id}, {$set: {scanAt: Date()}});
 
             if (hosts.length) {
                 this.scan(hosts);

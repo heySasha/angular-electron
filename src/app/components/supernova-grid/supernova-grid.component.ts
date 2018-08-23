@@ -88,9 +88,8 @@ export class SupernovaGridComponent implements OnInit {
     }
 
     private getData() {
-        this.model
-            .getMany(this.filters)
-            .then(data => {
+        this.model.getMany(this.filters)
+            .subscribe(data => {
                 console.log({data});
                 this.data = data;
             });
