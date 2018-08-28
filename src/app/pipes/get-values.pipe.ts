@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({name: 'getValues', pure: false})
 export class GetValuesPipe implements PipeTransform {
 
-    constructor(private readonly changeDetectorRef: ChangeDetectorRef) {
+    constructor() {
     }
 
     transform(map: Map<any, any>): any[] {
@@ -15,8 +15,6 @@ export class GetValuesPipe implements PipeTransform {
                 val: val
             });
         });
-
-        console.log(ret);
 
         return ret;
     }

@@ -1,9 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 
 @Component({
     selector: 'app-supernova-grid',
     templateUrl: 'supernova-grid.component.html',
-    styleUrls: ['supernova-grid.component.scss']
+    styleUrls: ['supernova-grid.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class SupernovaGridComponent implements OnInit {
@@ -22,18 +23,13 @@ export class SupernovaGridComponent implements OnInit {
         this.visibilityCols = data.params.colModel.filter(({hidden}) => !hidden);
         this.tableId = data.tableId;
         this.model = data.model;
-
-        // this.getData();
     }
 
-    constructor() {
+    constructor(private readonly cdr: ChangeDetectorRef) {
     }
 
     ngOnInit() {
-        // this.model.init();
-        // setTimeout(() => {}, 2000);
         this.getData();
-
     }
 
     public  select() {
@@ -52,11 +48,7 @@ export class SupernovaGridComponent implements OnInit {
     }
 
     public filtration(colName: string, value: string, type: string) {
-        // console.log(this.filters);
-
         const index = this.filtersAnd.findIndex(item => item[colName]);
-
-        // console.log(index);
 
         const filter = type === 'input' ? {[colName]: {$regex: value, $options: 'si'}} : {[colName]: value};
 
@@ -92,6 +84,7 @@ export class SupernovaGridComponent implements OnInit {
             .subscribe(data => {
                 console.log({data});
                 this.data = data;
+                this.cdr.detectChanges();
             });
     }
 }

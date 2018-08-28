@@ -4,7 +4,7 @@ import { ElectronService } from '../../../providers/electron.service';
 @Component({
     selector: 'app-settings',
     templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.scss'],
+    styleUrls: [],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent implements OnInit {
@@ -14,29 +14,25 @@ export class SettingsComponent implements OnInit {
     ]);
 
     constructor(private readonly electronService: ElectronService,
-                private cdr: ChangeDetectorRef) {
+                private readonly cdr: ChangeDetectorRef) {
       console.log('=====SettingsComponent(constructor)=======');
     }
 
     ngOnInit() {
     }
 
-    // todo fix changeDetection Pipe
     public checkUtil(util: string) {
-        console.log(util);
-
         const _util = this.electronService.childProcess.spawn(util, ['--version']);
 
         _util.stdout.on('data', (data) => {
-            this.utils.set(util, 'ssssssssssssss');
-            // this.cdr.markForCheck();
+            this.utils.set(util, data);
+            this.cdr.detectChanges();
         });
 
         _util.on('error', () => {
             this.utils.set(util, 'Please, install util!');
-            // this.cdr.markForCheck();
+            this.cdr.detectChanges();
         });
-
 
         console.log(this.utils);
     }
